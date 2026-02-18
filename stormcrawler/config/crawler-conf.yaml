@@ -1,0 +1,20 @@
+config:
+  topology.workers: 1
+  fetcher.threads.number: 20
+  fetcher.server.delay: 1.0
+  fetcher.max.crawl.delay: 30
+  http.agent.name: RegulasyonPlatformBot
+  http.agent.version: 0.1
+  http.agent.url: https://example.com/contact
+  http.content.limit: 5242880
+  urlfilters.config.file: urlfilters-regex.txt
+  parsefilters.config.file: parsefilters.json
+  status.updater.class: org.apache.stormcrawler.persistence.StdOutStatusUpdater
+  metadata.transfer: url.path
+  spout.class: org.apache.stormcrawler.spout.MemorySpout
+
+spout:
+  seedfile: /opt/stormcrawler/config/seeds.txt
+
+output:
+  discovered_urls_file: /opt/stormcrawler/output/discovered_urls.txt

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Regülasyon Takip Paneli</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Regülasyon Takip Paneli</h1>
+      <button id="refreshBtn">Yenile</button>
+    </header>
+
+    <main class="container">
+      <section class="cards" id="statsCards">
+        <article class="card"><h3>Toplam Regülasyon</h3><p id="statTotal">-</p></article>
+        <article class="card"><h3>Güncellenen Kayıt</h3><p id="statUpdated">-</p></article>
+        <article class="card"><h3>Storm URL Sayısı</h3><p id="statStorm">-</p></article>
+        <article class="card"><h3>Render Servisi</h3><p id="statRender">-</p></article>
+      </section>
+
+      <section class="panel">
+        <h2>Canlı Sağlık</h2>
+        <div class="row">
+          <span>API:</span><strong id="apiHealth">Kontrol ediliyor...</strong>
+          <span>Render:</span><strong id="renderHealth">Kontrol ediliyor...</strong>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Ingest</h2>
+        <div class="row">
+          <input id="seedInput" type="text" value="https://www.mevzuat.gov.tr/" />
+          <button id="ingestBtn">Ingest Çalıştır</button>
+        </div>
+        <pre id="ingestResult">Henüz çalıştırılmadı.</pre>
+      </section>
+
+      <section class="grid-2">
+        <section class="panel">
+          <h2>Regülasyonlar</h2>
+          <ul id="regList"></ul>
+        </section>
+
+        <section class="panel">
+          <h2>Güncellemeler</h2>
+          <ul id="changeList"></ul>
+        </section>
+      </section>
+
+      <section class="panel">
+        <h2>Arama</h2>
+        <div class="row">
+          <input id="searchInput" type="text" placeholder="Örn: kanun, tebliğ, yönetmelik" />
+          <button id="searchBtn">Ara</button>
+        </div>
+        <ul id="searchList"></ul>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

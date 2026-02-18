@@ -1,0 +1,3 @@
+# accept only same-domain by default
++^https?://(www\.)?mevzuat\.gov\.tr/.*
+-.*

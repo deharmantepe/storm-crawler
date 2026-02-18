@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+  api:
+    image: python:3.12-slim
+    container_name: regulation-api
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      - ./data:/app/data
+    environment:
+      - RENDER_SERVICE_URL=http://render-service:9000/render
+      - USE_PLAYWRIGHT_RENDER=true
+      - STORM_DISCOVERED_URLS_FILE=/app/data/stormcrawler/discovered_urls.txt
+    command: bash -lc "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    depends_on:
+      - render-service
+    ports:
+      - "8000:8000"
+
+  render-service:
+    build:
+      context: ./render-service
+      dockerfile: Dockerfile
+    container_name: regulation-render
+    ports:
+      - "9000:9000"
+
+  zookeeper:
+    image: zookeeper:3.9
+    container_name: regulation-zookeeper
+    profiles: ["storm"]
+    ports:
+      - "2181:2181"
+
+  storm-nimbus:
+    image: storm:2.6.2
+    container_name: regulation-storm-nimbus
+    command: storm nimbus
+    profiles: ["storm"]
+    environment:
+      - STORM_ZOOKEEPER_SERVERS=zookeeper
+      - STORM_NIMBUS_SEEDS=storm-nimbus
+    depends_on:
+      - zookeeper
+
+  storm-supervisor:
+    image: storm:2.6.2
+    container_name: regulation-storm-supervisor
+    command: storm supervisor
+    profiles: ["storm"]
+    environment:
+      - STORM_ZOOKEEPER_SERVERS=zookeeper
+      - STORM_NIMBUS_SEEDS=storm-nimbus
+    depends_on:
+      - storm-nimbus
+
+  storm-ui:
+    image: storm:2.6.2
+    container_name: regulation-storm-ui
+    command: storm ui
+    profiles: ["storm"]
+    environment:
+      - STORM_ZOOKEEPER_SERVERS=zookeeper
+      - STORM_NIMBUS_SEEDS=storm-nimbus
+    depends_on:
+      - storm-nimbus
+    ports:
+      - "8081:8080"
